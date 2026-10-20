@@ -1,0 +1,36 @@
+name: tom_kdbx_store
+description: >-
+  KDBX storage for Tom applications: a record store over a KDBX file (one entry
+  per record, entry history, recycle-bin delete, reserved entries), an
+  encrypted settings container with its key, token, location and identity
+  groups, and the KDBX binding of tom_core_settings' key port. GPL-3.0.
+version: 0.1.0
+publish_to: none
+repository: https://github.com/al-the-bear/tom_kdbx_store
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  # The KDBX format, from the workspace's fork at its pinned branch: a git ref,
+  # never a path to the fork's working copy (tom_ai/xternal/tom_kdbx), so this
+  # package builds against the branch and not against whatever that checkout
+  # holds. The same pin as every other consumer; the fork registry records it.
+  # The repository is named `tom_kdbx`, not `tom_kdbx.dart`: GitHub's rename
+  # redirect resolves both, and only this one is the repository's own name.
+  kdbx:
+    git:
+      url: https://github.com/al-the-bear/tom_kdbx.git
+      ref: tom/2.4.2-patches
+  meta: ^1.15.0
+  # The key port, the secret-store port and device settings.
+  tom_core_settings:
+    path: ../../core/tom_core_settings
+  # The storage port a settings container is read and committed through.
+  tom_core_storage:
+    path: ../../core/tom_core_storage
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0
+  yaml: ^3.1.0
