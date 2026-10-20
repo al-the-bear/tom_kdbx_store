@@ -15,6 +15,10 @@
   history snapshot per write that changes the set (the append-only history
   area), verification on read, a missing binary skipped. Adds `tom_basics` and
   `yaml` as dependencies.
+- **`TomKdbxHistoryStore`** — `tom_core_sync`'s history port over KDBX entry
+  history: positional locators, retention by depth with a protected version
+  that is re-pointed when it moves, append-only records left whole. Adds
+  `tom_core_sync` as a dependency.
 - **The settings container.** `TomKdbxSettingsStore` (groups, entries,
   single-entry fragment groups; no group names; marker and field names under
   the application's namespace), `TomKdbxSettingsVersionException` for a newer

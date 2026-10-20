@@ -30,6 +30,7 @@ export 'package:kdbx/kdbx.dart'
         ProtectedValue;
 
 export 'src/asset_entry.dart';
+export 'src/history_store.dart';
 export 'src/identity_store.dart';
 export 'src/key_credentials.dart';
 export 'src/key_provider.dart';

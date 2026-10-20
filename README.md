@@ -26,6 +26,12 @@ things.
   changes the asset set is one `modify`, so the entry's history gains one
   snapshot holding every asset the write retired — the append-only history
   area a retired asset resolves from.
+- **History.** `TomKdbxHistoryStore` is `tom_core_sync`'s history port over
+  entry history: a retained version is a detached snapshot appended to the
+  record's entry and addressed by its position, and pruning walks every record
+  entry — the recycle bin included — keeping the newest versions, any version
+  a conflict record still names, and the whole history of an append-only
+  record, and answers where a protected version moved to.
 - **Settings.** `TomKdbxSettingsStore` is a settings container's layout:
   groups of entries, and single-entry groups that park a YAML fragment on one
   entry. It knows no group names; every group is a consumer —
@@ -114,7 +120,7 @@ packages for it.
 
 ## Tests
 
-`dart test` runs the record store, the asset entry, the settings groups and the store's own
+`dart test` runs the record store, the asset entry, the history store, the settings groups and the store's own
 guard that it names no group, the settings version refusal, the discard of an
 unopenable container, the bootstrap, and a check that `kdbx` resolves from the
 pinned fork.
