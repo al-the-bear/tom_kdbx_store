@@ -23,6 +23,9 @@ dependencies:
       url: https://github.com/al-the-bear/tom_kdbx.git
       ref: tom/2.4.2-patches
   meta: ^1.15.0
+  # The canonical YAML emitter and reader for an asset entry's metadata.
+  tom_basics:
+    path: ../../basics/tom_basics
   # The key port, the secret-store port and device settings.
   tom_core_settings:
     path: ../../core/tom_core_settings
@@ -30,7 +33,9 @@ dependencies:
   tom_core_storage:
     path: ../../core/tom_core_storage
 
+  # Reading an asset entry's metadata fragment.
+  yaml: ^3.1.0
+
 dev_dependencies:
   lints: ^6.0.0
   test: ^1.25.0
-  yaml: ^3.1.0

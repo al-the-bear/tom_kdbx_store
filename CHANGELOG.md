@@ -10,6 +10,11 @@
   records cleared for every entry written, detached history snapshots, history
   pruning that keeps a protected snapshot and reports where it moved, reserved
   entries at fixed ids, and the file's meta custom data.
+- **`TomKdbxAssetEntry`** — a `TomAssetStore` in a KDBX file: binaries on one
+  reserved entry keyed by asset id, the metadata map as a fragment on it, one
+  history snapshot per write that changes the set (the append-only history
+  area), verification on read, a missing binary skipped. Adds `tom_basics` and
+  `yaml` as dependencies.
 - **The settings container.** `TomKdbxSettingsStore` (groups, entries,
   single-entry fragment groups; no group names; marker and field names under
   the application's namespace), `TomKdbxSettingsVersionException` for a newer

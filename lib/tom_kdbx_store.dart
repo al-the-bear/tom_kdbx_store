@@ -1,4 +1,5 @@
-/// KDBX storage for Tom applications: a record store over a KDBX file, an
+/// KDBX storage for Tom applications: a record store over a KDBX file, assets
+/// as binaries on a reserved entry, an
 /// encrypted settings container with its groups (keys, tokens, locations,
 /// identity), the KDBX binding of `tom_core_settings`' key port, and the
 /// settings bootstrap's container half.
@@ -28,6 +29,7 @@ export 'package:kdbx/kdbx.dart'
         PlainValue,
         ProtectedValue;
 
+export 'src/asset_entry.dart';
 export 'src/identity_store.dart';
 export 'src/key_credentials.dart';
 export 'src/key_provider.dart';

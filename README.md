@@ -20,6 +20,12 @@ things.
   reserved entries at fixed ids. What a record *contains* is the caller's; the
   store never reads a field. Webwork's `.webwork.kdbx` document layout is one
   consumer of it.
+- **Assets.** `TomKdbxAssetEntry` keeps a `tom_core_storage` `TomAssetStore`
+  in the file: every asset's bytes are a binary of one reserved entry, keyed by
+  its id, with the metadata map as a fragment on that entry. A write that
+  changes the asset set is one `modify`, so the entry's history gains one
+  snapshot holding every asset the write retired — the append-only history
+  area a retired asset resolves from.
 - **Settings.** `TomKdbxSettingsStore` is a settings container's layout:
   groups of entries, and single-entry groups that park a YAML fragment on one
   entry. It knows no group names; every group is a consumer —
@@ -108,7 +114,7 @@ packages for it.
 
 ## Tests
 
-`dart test` runs the record store, the settings groups and the store's own
+`dart test` runs the record store, the asset entry, the settings groups and the store's own
 guard that it names no group, the settings version refusal, the discard of an
 unopenable container, the bootstrap, and a check that `kdbx` resolves from the
 pinned fork.
