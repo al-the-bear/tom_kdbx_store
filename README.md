@@ -59,7 +59,7 @@ Consumed by path inside this workspace:
 ```yaml
 dependencies:
   tom_kdbx_store:
-    path: ../../tom_ai/xternal/tom_kdbx_store
+    path: ../../tom_ai/kdbx_store
 ```
 
 It depends on the workspace's `kdbx` fork by a pinned git ref
