@@ -4,6 +4,12 @@
 
 ### Added
 
+- **`package:tom_kdbx_store/testing.dart`** — `TomKdbxForeignClient`, what
+  another KeePass client does to a file and this package never does (file an
+  entry under a folder, empty it out of the recycle bin), for a consumer's
+  tests; and **`TomKdbxRecordStore.isRecordedDeleted`**, whether a record is
+  recorded as permanently deleted. With them a consumer needs no dependency on
+  `kdbx` of its own: this is the one package that pins the fork.
 - **`TomKdbxRecordStore`** — a KDBX file as a store of records: one root-group
   entry per record, entry UUID = record id; restore-or-create for a returning
   record (moved back from the recycle bin, never minted twice), deletion

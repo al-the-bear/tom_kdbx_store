@@ -12,12 +12,47 @@ environment:
   sdk: ^3.10.0
 
 dependencies:
-  # The KDBX format, from the workspace's fork at its pinned branch: a git ref,
-  # never a path to the fork's working copy (tom_ai/xternal/tom_kdbx), so this
-  # package builds against the branch and not against whatever that checkout
-  # holds. The same pin as every other consumer; the fork registry records it.
-  # The repository is named `tom_kdbx`, not `tom_kdbx.dart`: GitHub's rename
-  # redirect resolves both, and only this one is the repository's own name.
+  # Fork of authpass/kdbx.dart 2.4.2 carrying the patches this product needs.
+  # The branch is named for the series rather than for any one patch, so it
+  # stays accurate as the series grows; what is *in* it is listed here:
+  #
+  #   1. `KdbxObjectUuidControl.assignUuid` — a public UUID-assignment API, so
+  #      entry UUID = section UUID can be set at creation without an
+  #      implementation_imports src-import.
+  #   2. `KdbxCustomData.remove` — the map-like surface had no removal, so a
+  #      meta key could only be blanked. §8.4's `webwork.conflicts` must be
+  #      able to disappear, because mode a omits `conflicts:` when there is
+  #      nothing to say and §9 asks the two modes to spell "nothing" alike.
+  #   3. `KdbxDao.clearDeletion` / `isDeleted` — a `DeletedObjects` record
+  #      could be added and never removed. A section that returns after
+  #      another client emptied the recycle bin must not stay recorded as
+  #      deleted, or a client merging two copies deletes it again.
+  #   4. `xml: '>=4.4.0 <8.0.0'` — upstream caps `xml` below 7, which kept
+  #      every Webwork package off `pdf` 3.13 (it needs `xml` ^7.0.1) and so
+  #      off the `archive` and `image` releases that build together.
+  #
+  # Return to pub.dev once all four are upstreamed.
+  #
+  # The fork has a working copy in this workspace: `tom_ai/xternal/tom_kdbx`,
+  # a submodule of `tom_ai` beside the other forked upstreams, checked out
+  # DETACHED at the series head and left alone by the fleet skills (no `main`
+  # ref, so they treat it as pinned). To change the fork: in that directory,
+  # `git checkout tom/2.4.2-patches`, commit, bump `version:` to the next
+  # `2.4.2+tom.N`, push, `git checkout --detach`, commit the moved gitlink in
+  # `tom_ai`; then `dart pub upgrade kdbx` here and in every package that takes
+  # this one, which is the only thing that moves a lock's `resolved-ref`. The
+  # pin below stays a git ref — never a path to that working copy — because a
+  # path override would make this package build against whatever that checkout
+  # happens to hold
+  # (`test/supply_chain_test.dart`, and the workspace's no-path-override
+  # rule). This is the only package that names `kdbx`: every Tom application
+  # reaches KDBX through this one.
+  #
+  # The repository is named `tom_kdbx`, NOT `tom_kdbx.dart`. Both URLs resolve,
+  # because GitHub keeps a rename redirect — but only this spelling is the
+  # repository's own name, and a redirect stops working the day someone creates
+  # a new repo under the freed-up name. Do not "correct" it to match upstream's
+  # `kdbx.dart`. `test/supply_chain_test.dart` enforces this.
   kdbx:
     git:
       url: https://github.com/al-the-bear/tom_kdbx.git

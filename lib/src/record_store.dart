@@ -117,6 +117,12 @@ class TomKdbxRecordStore {
   /// a record, so the call costs a lookup that finds nothing.
   void markLive(KdbxEntry entry) => file.clearDeletion(entry.uuid);
 
+  /// Whether a record [id] is recorded as permanently deleted — the record a
+  /// client that emptied the recycle bin leaves, which a merge of two copies
+  /// reads as "delete this entry". [markLive] clears it.
+  bool isRecordedDeleted(String id) =>
+      file.isDeleted(tomKdbxUuidFromCanonical(id));
+
   /// Moves [entry] to the recycle bin, with its history.
   void delete(KdbxEntry entry) => file.deleteEntry(entry);
 

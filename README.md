@@ -17,9 +17,10 @@ things.
   entry with the same UUID, clears a stale deletion record from an entry being
   written, makes detached history snapshots, prunes history while protecting a
   snapshot a caller still names (and reports where it moved), and mints
-  reserved entries at fixed ids. What a record *contains* is the caller's; the
-  store never reads a field. Webwork's `.webwork.kdbx` document layout is one
-  consumer of it.
+  reserved entries at fixed ids, and says whether a record is recorded as
+  permanently deleted. What a record *contains* is the caller's; the store
+  never reads a field. Webwork's `.webwork.kdbx` document layout and its
+  encrypted collaboration file are consumers of it.
 - **Assets.** `TomKdbxAssetEntry` keeps a `tom_core_storage` `TomAssetStore`
   in the file: every asset's bytes are a binary of one reserved entry, keyed by
   its id, with the metadata map as a fragment on that entry. A write that
@@ -51,6 +52,14 @@ Keys are stated as `tom_core_settings`' `TomKeyMaterial`;
 `TomKdbxKeyProvider` is the `TomKeyRegistry` that turns material into KDBX
 `Credentials` (a passphrase, a key file, or both) and opens containers, with a
 default key and an override per file.
+
+This is the one package that declares `kdbx`. A consumer reaches the format
+through the types this package re-exports and the operations it names, and
+never depends on `kdbx` itself, so the fork is pinned in one place. For a
+consumer's tests, `package:tom_kdbx_store/testing.dart` has
+`TomKdbxForeignClient`: what another KeePass client does to a file and this
+package never does — filing an entry under a folder of its own, emptying the
+recycle bin.
 
 ## Installation
 
@@ -122,5 +131,5 @@ packages for it.
 
 `dart test` runs the record store, the asset entry, the history store, the settings groups and the store's own
 guard that it names no group, the settings version refusal, the discard of an
-unopenable container, the bootstrap, and a check that `kdbx` resolves from the
-pinned fork.
+unopenable container, the bootstrap, the foreign client's moves, and a check
+that `kdbx` resolves from the pinned fork.
