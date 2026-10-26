@@ -1,7 +1,7 @@
 /// Opening the encrypted settings container with the one key a device holds.
 library;
 
-import 'package:kdbx/kdbx.dart';
+import 'package:tom_kdbx/tom_kdbx.dart';
 import 'package:tom_core_settings/tom_core_settings.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 

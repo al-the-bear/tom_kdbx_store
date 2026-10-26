@@ -1,14 +1,14 @@
 /// Key material as KDBX credentials.
 library;
 
-import 'package:kdbx/kdbx.dart';
+import 'package:tom_kdbx/tom_kdbx.dart';
 import 'package:tom_core_settings/tom_core_settings.dart';
 
 /// The KDBX binding of [TomKeyMaterial]: material → `kdbx` credentials.
 ///
 /// An extension rather than a method, so the material itself stays in
 /// `tom_core_settings` with no `kdbx` import, and only code that already links
-/// `package:kdbx` can ask for credentials.
+/// `package:tom_kdbx` can ask for credentials.
 extension TomKdbxKeyMaterialCredentials on TomKeyMaterial {
   /// Builds kdbx [Credentials] from this material.
   ///

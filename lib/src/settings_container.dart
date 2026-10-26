@@ -16,7 +16,7 @@ library;
 
 import 'dart:typed_data';
 
-import 'package:kdbx/kdbx.dart';
+import 'package:tom_kdbx/tom_kdbx.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 
 import 'settings_store.dart';

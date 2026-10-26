@@ -7,7 +7,7 @@
 /// depending on `kdbx` itself. Not for shipped code.
 library;
 
-import 'package:kdbx/kdbx.dart';
+import 'package:tom_kdbx/tom_kdbx.dart';
 
 /// Another KeePass client, acting on [file].
 final class TomKdbxForeignClient {

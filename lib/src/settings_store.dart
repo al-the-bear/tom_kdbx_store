@@ -1,7 +1,7 @@
 /// The layout of an encrypted settings container.
 library;
 
-import 'package:kdbx/kdbx.dart';
+import 'package:tom_kdbx/tom_kdbx.dart';
 import 'package:meta/meta.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 

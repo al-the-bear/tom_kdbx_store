@@ -7,7 +7,7 @@ import 'dart:typed_data';
 
 // The recycle-bin purge another KDBX client performs is a kdbx extension
 // method the curated export does not carry.
-import 'package:kdbx/kdbx.dart' show KdbxDao;
+import 'package:tom_kdbx/tom_kdbx.dart' show KdbxDao;
 import 'package:test/test.dart';
 import 'package:tom_kdbx_store/tom_kdbx_store.dart';
 

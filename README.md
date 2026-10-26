@@ -2,7 +2,7 @@
 
 KDBX storage for Tom applications: a **record store** over a KDBX file, an
 **encrypted settings container** with its groups, and the **KDBX binding** of
-`tom_core_settings`' key port. Licensed GPL-3.0, because it imports `kdbx`.
+`tom_core_settings`' key port. Licensed GPL-3.0, because it imports `tom_kdbx`.
 
 ## Overview
 
@@ -53,9 +53,10 @@ Keys are stated as `tom_core_settings`' `TomKeyMaterial`;
 `Credentials` (a passphrase, a key file, or both) and opens containers, with a
 default key and an override per file.
 
-This is the one package that declares `kdbx`. A consumer reaches the format
-through the types this package re-exports and the operations it names, and
-never depends on `kdbx` itself, so the fork is pinned in one place. For a
+This is the one package that declares `tom_kdbx`. A consumer reaches the
+format through the types this package re-exports and the operations it names,
+and never depends on `tom_kdbx` itself, so the fork's version is chosen in one
+place. For a
 consumer's tests, `package:tom_kdbx_store/testing.dart` has
 `TomKdbxForeignClient`: what another KeePass client does to a file and this
 package never does — filing an entry under a folder of its own, emptying the
@@ -71,8 +72,9 @@ dependencies:
     path: ../../tom_ai/kdbx_store
 ```
 
-It depends on the workspace's `kdbx` fork by a pinned git ref
-(`al-the-bear/tom_kdbx`, branch `tom/2.4.2-patches`), never by a path to the
+It depends on [`tom_kdbx`](https://pub.dev/packages/tom_kdbx) by version — the
+workspace's fork of `kdbx` 2.4.2, published on pub.dev from
+`al-the-bear/tom_kdbx`, branch `tom/2.4.2-patches` — never by a path to the
 fork's working copy. Dart SDK `^3.10.0`; no Flutter dependency.
 
 ## Example
@@ -106,7 +108,7 @@ Future<void> main() async {
 
 ## Limits
 
-- **No browser.** `package:kdbx` compiles under dart2js and then throws
+- **No browser.** `package:tom_kdbx` compiles under dart2js and then throws
   `Uint64 accessor not supported by dart2js` on the first container it reads or
   writes: the KDBX 4 header's variant dictionary is written with
   `ByteData.setUint64` and read with `getUint64`, which dart2js does not
@@ -117,13 +119,13 @@ Future<void> main() async {
   it cannot tell a deletion from an absence, settles disagreements silently,
   and does not merge meta custom data. A consumer that syncs merges its own
   model and writes the result; entries supply history, not merge semantics.
-- **The history a library pushes is its own.** `kdbx` decides when a field
+- **The history a library pushes is its own.** `tom_kdbx` decides when a field
   write pushes a history snapshot; a version that must be kept without becoming
   current is added explicitly with `historySnapshot`.
 
 ## Licence
 
-GPL-3.0 (see [LICENSE](LICENSE)), inherited from `kdbx`. A BSD-3 package never
+GPL-3.0 (see [LICENSE](LICENSE)), inherited from `tom_kdbx` (upstream `kdbx`). A BSD-3 package never
 depends on this one; the Webwork seam audit checks the workspace's shared BSD
 packages for it.
 
@@ -132,4 +134,5 @@ packages for it.
 `dart test` runs the record store, the asset entry, the history store, the settings groups and the store's own
 guard that it names no group, the settings version refusal, the discard of an
 unopenable container, the bootstrap, the foreign client's moves, and a check
-that `kdbx` resolves from the pinned fork.
+that `tom_kdbx` is taken by version from pub.dev, with no second KDBX
+implementation beside it.

@@ -4,7 +4,7 @@
 /// identity), the KDBX binding of `tom_core_settings`' key port, and the
 /// settings bootstrap's container half.
 ///
-/// GPL-3.0, because it imports `package:kdbx`; a BSD package never imports
+/// GPL-3.0, because it imports `package:tom_kdbx`; a BSD package never imports
 /// this one.
 library;
 
@@ -14,7 +14,7 @@ library;
 // on `kdbx` directly. `KdbxCustomData` is what [TomKdbxRecordStore.meta]
 // returns; `PlainValue` and `ProtectedValue` are the two kinds of field value a
 // group distinguishes — a token or a key is protected, a locator is not.
-export 'package:kdbx/kdbx.dart'
+export 'package:tom_kdbx/tom_kdbx.dart'
     show
         Credentials,
         KdbxCustomData,

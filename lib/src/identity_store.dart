@@ -9,7 +9,7 @@
 /// read. There is deliberately no `Password` field.
 library;
 
-import 'package:kdbx/kdbx.dart';
+import 'package:tom_kdbx/tom_kdbx.dart';
 
 import 'package:tom_core_settings/tom_core_settings.dart';
 import 'settings_store.dart';

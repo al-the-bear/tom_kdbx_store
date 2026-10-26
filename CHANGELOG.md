@@ -9,7 +9,11 @@
   entry under a folder, empty it out of the recycle bin), for a consumer's
   tests; and **`TomKdbxRecordStore.isRecordedDeleted`**, whether a record is
   recorded as permanently deleted. With them a consumer needs no dependency on
-  `kdbx` of its own: this is the one package that pins the fork.
+  `tom_kdbx` of its own: this is the one package that names the fork.
+- **`tom_kdbx` by version.** The KDBX format is `tom_kdbx` ^2.4.2+tom.4 from
+  pub.dev (the workspace's fork of `kdbx`, published under its own name),
+  replacing the git dependency on the fork; imports are
+  `package:tom_kdbx/tom_kdbx.dart`.
 - **`TomKdbxRecordStore`** — a KDBX file as a store of records: one root-group
   entry per record, entry UUID = record id; restore-or-create for a returning
   record (moved back from the recycle bin, never minted twice), deletion
