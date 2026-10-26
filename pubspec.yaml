@@ -24,8 +24,7 @@ dependencies:
       ref: tom/2.4.2-patches
   meta: ^1.15.0
   # The canonical YAML emitter and reader for an asset entry's metadata.
-  tom_basics:
-    path: ../basics/tom_basics
+  tom_basics: ">=3.3.0"
   # The key port, the secret-store port and device settings.
   tom_core_settings:
     path: ../core/tom_core_settings
