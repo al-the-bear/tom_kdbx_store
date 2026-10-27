@@ -46,7 +46,7 @@ dependencies:
     path: ../core/tom_core_storage
   # The history-store port the KDBX entry history implements.
   tom_core_sync:
-    path: ../core/tom_core_sync
+    path: ../core_extension/tom_core_sync
 
   # Reading an asset entry's metadata fragment.
   yaml: ^3.1.0
