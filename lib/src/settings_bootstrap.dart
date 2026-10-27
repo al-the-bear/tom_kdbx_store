@@ -2,7 +2,7 @@
 library;
 
 import 'package:tom_kdbx/tom_kdbx.dart';
-import 'package:tom_core_settings/tom_core_settings.dart';
+import 'package:tom_core_storage/settings.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 
 import 'key_provider.dart';
@@ -12,7 +12,7 @@ import 'settings_container.dart';
 /// returns the container.
 ///
 /// Minting the key, keeping it in the platform secret store and recording its
-/// handle in device settings is `tom_core_settings`' [TomSettingsKeyBootstrap],
+/// handle in device settings is `tom_core_storage`'s [TomSettingsKeyBootstrap],
 /// which knows no container format. This adds the KDBX half: the key is
 /// registered with the key provider for [locator], and the container it opens
 /// is handed back.

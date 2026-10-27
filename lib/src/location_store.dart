@@ -12,7 +12,7 @@ library;
 
 import 'package:tom_kdbx/tom_kdbx.dart';
 
-import 'package:tom_core_settings/tom_core_settings.dart';
+import 'package:tom_core_storage/settings.dart';
 import 'settings_store.dart';
 
 /// Reads and writes the `locations` group of a settings container.

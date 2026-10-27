@@ -1,7 +1,7 @@
 /// KDBX storage for Tom applications: a record store over a KDBX file, assets
 /// as binaries on a reserved entry, an
 /// encrypted settings container with its groups (keys, tokens, locations,
-/// identity), the KDBX binding of `tom_core_settings`' key port, and the
+/// identity), the KDBX binding of `tom_core_storage`'s key port, and the
 /// settings bootstrap's container half.
 ///
 /// GPL-3.0, because it imports `package:tom_kdbx`; a BSD package never imports

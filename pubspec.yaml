@@ -3,7 +3,7 @@ description: >-
   KDBX storage for Tom applications: a record store over a KDBX file (one entry
   per record, entry history, recycle-bin delete, reserved entries), an
   encrypted settings container with its key, token, location and identity
-  groups, and the KDBX binding of tom_core_settings' key port. GPL-3.0.
+  groups, and the KDBX binding of tom_core_storage's key port. GPL-3.0.
 version: 0.1.0
 publish_to: none
 repository: https://github.com/al-the-bear/tom_kdbx_store
@@ -41,9 +41,6 @@ dependencies:
   meta: ^1.15.0
   # The canonical YAML emitter and reader for an asset entry's metadata.
   tom_basics: ">=3.3.0"
-  # The key port, the secret-store port and device settings.
-  tom_core_settings:
-    path: ../core/tom_core_settings
   # The storage port a settings container is read and committed through.
   tom_core_storage:
     path: ../core/tom_core_storage

@@ -2,7 +2,7 @@
 
 KDBX storage for Tom applications: a **record store** over a KDBX file, an
 **encrypted settings container** with its groups, and the **KDBX binding** of
-`tom_core_settings`' key port. Licensed GPL-3.0, because it imports `tom_kdbx`.
+`tom_core_storage`'s key port. Licensed GPL-3.0, because it imports `tom_kdbx`.
 
 ## Overview
 
@@ -41,14 +41,14 @@ things.
   and whatever groups an application adds. `TomKdbxSettingsContainer` opens and
   commits the container through a `TomStorage`, and
   `TomKdbxSettingsBootstrap` opens it with the one key a device holds, minted by
-  `tom_core_settings`' `TomSettingsKeyBootstrap`.
+  `tom_core_storage`'s `TomSettingsKeyBootstrap`.
 
 The marker and field names a settings container stores are formed from the
 **namespace** the application passes (`<namespace>.settings`,
 `<namespace>.content`, `<namespace>.keyFile`), so an application's existing
 containers keep reading and two applications' containers are told apart.
 
-Keys are stated as `tom_core_settings`' `TomKeyMaterial`;
+Keys are stated as `tom_core_storage`'s `TomKeyMaterial`;
 `TomKdbxKeyProvider` is the `TomKeyRegistry` that turns material into KDBX
 `Credentials` (a passphrase, a key file, or both) and opens containers, with a
 default key and an override per file.
@@ -80,7 +80,7 @@ fork's working copy. Dart SDK `^3.10.0`; no Flutter dependency.
 ## Example
 
 ```dart
-import 'package:tom_core_settings/tom_core_settings.dart';
+import 'package:tom_core_storage/settings.dart';
 import 'package:tom_core_storage/io.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 import 'package:tom_kdbx_store/tom_kdbx_store.dart';
@@ -113,7 +113,7 @@ Future<void> main() async {
   writes: the KDBX 4 header's variant dictionary is written with
   `ByteData.setUint64` and read with `getUint64`, which dart2js does not
   implement. A web build therefore cannot use this package; a browser
-  application holds key material with `tom_core_settings`'
+  application holds key material with `tom_core_storage`'s
   `TomMemoryKeyRegistry` and persists no encrypted settings.
 - **No container-level merge.** `KdbxFile.merge` is two-way and entry-scoped:
   it cannot tell a deletion from an absence, settles disagreements silently,

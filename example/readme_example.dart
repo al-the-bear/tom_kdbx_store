@@ -1,7 +1,7 @@
 /// The README's example, compiled.
 library;
 
-import 'package:tom_core_settings/tom_core_settings.dart';
+import 'package:tom_core_storage/settings.dart';
 import 'package:tom_core_storage/io.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 import 'package:tom_kdbx_store/tom_kdbx_store.dart';

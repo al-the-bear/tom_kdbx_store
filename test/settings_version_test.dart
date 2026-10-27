@@ -3,7 +3,7 @@
 library;
 
 import 'package:test/test.dart';
-import 'package:tom_core_settings/tom_core_settings.dart';
+import 'package:tom_core_storage/settings.dart';
 import 'package:tom_kdbx_store/tom_kdbx_store.dart';
 
 import 'support/memory_storage.dart';
