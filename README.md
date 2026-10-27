@@ -1,5 +1,7 @@
 # tom_kdbx_store
 
+Published on pub.dev as [`tom_kdbx_store` 0.1.0](https://pub.dev/packages/tom_kdbx_store).
+
 KDBX storage for Tom applications: a **record store** over a KDBX file, an
 **encrypted settings container** with its groups, and the **KDBX binding** of
 `tom_core_storage`'s key port. Licensed GPL-3.0, because it imports `tom_kdbx`.
