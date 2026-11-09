@@ -138,3 +138,13 @@ guard that it names no group, the settings version refusal, the discard of an
 unopenable container, the bootstrap, the foreign client's moves, and a check
 that `tom_kdbx` is taken by version from pub.dev, with no second KDBX
 implementation beside it.
+
+## Disclaimer
+
+This software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability and
+fitness for a particular purpose. In no event shall the authors, copyright
+holders or contributors be liable for any claim, damages or other liability
+arising from, out of or in connection with the software or its use. This
+section summarises the warranty and liability disclaimer of the licence;
+the licence text in [LICENSE](LICENSE) governs.
