@@ -351,6 +351,10 @@ class KdbxFile {
   /// Whether the file records [uuid] as permanently deleted.
   bool isDeleted(KdbxUuid uuid) => _db.deletedObjects.containsKey(uuid._native);
 
+  /// The UUIDs the file records as permanently deleted.
+  Iterable<KdbxUuid> get deletedObjects =>
+      _db.deletedObjects.keys.map((uuid) => KdbxUuid(uuid.string));
+
   /// Forgets that [uuid] was permanently deleted, and says whether the file
   /// had recorded it. Changes nothing else.
   bool clearDeletion(KdbxUuid uuid) =>
@@ -387,6 +391,12 @@ final class KdbxMeta {
     () => _file._db.meta.name,
     (value) => _file._db.meta.name = value ?? '',
   );
+
+  /// The file's custom icons: their image bytes by UUID.
+  Map<KdbxUuid, Uint8List> get customIcons => {
+    for (final icon in _file._db.meta.customIcons.entries)
+      KdbxUuid(icon.key.string): Uint8List.fromList(icon.value.data),
+  };
 
   /// The file's custom data: string values by key, belonging to the file.
   late final KdbxCustomData customData = KdbxCustomData._(
@@ -540,6 +550,13 @@ class KdbxEntry {
 
   /// The entry's earlier versions, oldest first.
   late final List<KdbxEntry> history = _HistoryList(this);
+
+  /// The UUID of the entry's custom icon (see [KdbxMeta.customIcons]), or
+  /// null.
+  KdbxUuid? get customIconUuid {
+    final icon = _native.customIcon;
+    return icon == null ? null : KdbxUuid(icon.string);
+  }
 
   /// The entry's Title.
   String? get label => getString(KdbxKeyCommon.TITLE)?.getText();

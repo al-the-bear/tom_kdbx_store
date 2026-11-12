@@ -1,0 +1,161 @@
+[
+  {
+    "file": "kp41_argon2d_aes_pw.kdbx",
+    "writer": "tom_kpasslib 1.1.2+tom.3",
+    "version": "4.1",
+    "kdf": "argon2d",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "kp41_argon2id_chacha20_pw.kdbx",
+    "writer": "tom_kpasslib 1.1.2+tom.3",
+    "version": "4.1",
+    "kdf": "argon2id",
+    "cipher": "chacha20",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "kp40_aeskdf_aes_keyfile.kdbx",
+    "writer": "tom_kpasslib 1.1.2+tom.3",
+    "version": "4.0",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": null,
+    "keyFile": "corpus_v2.keyx"
+  },
+  {
+    "file": "kp41_argon2id_aes_both.kdbx",
+    "writer": "tom_kpasslib 1.1.2+tom.3",
+    "version": "4.1",
+    "kdf": "argon2id",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": "corpus_hex.key"
+  },
+  {
+    "file": "kp31_aeskdf_aes_pw.kdbx",
+    "writer": "tom_kpasslib 1.1.2+tom.3",
+    "version": "3.1",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "kp31_aeskdf_chacha20_both.kdbx",
+    "writer": "tom_kpasslib 1.1.2+tom.3",
+    "version": "3.1",
+    "kdf": "aes-kdf",
+    "cipher": "chacha20",
+    "password": "corpus-demo",
+    "keyFile": "corpus_v1.key"
+  },
+  {
+    "file": "tk40_argon2d_aes_pw.kdbx",
+    "writer": "tom_kdbx 2.4.2+tom.4",
+    "version": "4.0",
+    "kdf": "argon2d",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "tk40_argon2d_chacha20_both.kdbx",
+    "writer": "tom_kdbx 2.4.2+tom.4",
+    "version": "4.0",
+    "kdf": "argon2d",
+    "cipher": "chacha20",
+    "password": "corpus-demo",
+    "keyFile": "corpus_v2.keyx"
+  },
+  {
+    "file": "store010_document.kdbx",
+    "writer": "tom_kdbx_store 0.1.0 (tom_kdbx 2.4.2+tom.4)",
+    "version": "4.0",
+    "kdf": "argon2d",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null,
+    "note": "a Webwork document: records, history, recycle bin, a purged record, an asset entry"
+  },
+  {
+    "file": "store010_settings.kdbx",
+    "writer": "tom_kdbx_store 0.1.0 (tom_kdbx 2.4.2+tom.4)",
+    "version": "4.0",
+    "kdf": "argon2d",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null,
+    "note": "a Webwork settings container: keys, tokens (one removed), locations, identity, a fragment group"
+  },
+  {
+    "file": "kxc_kp41_argon2d_aes_pw.kdbx",
+    "writer": "KeePassXC 2.8.0 (changed and saved kp41_argon2d_aes_pw.kdbx)",
+    "version": "4.1",
+    "kdf": "argon2d",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "kxc_kp41_argon2id_chacha20_pw.kdbx",
+    "writer": "KeePassXC 2.8.0 (changed and saved kp41_argon2id_chacha20_pw.kdbx)",
+    "version": "4.1",
+    "kdf": "argon2id",
+    "cipher": "chacha20",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "kxc_kp40_aeskdf_aes_keyfile.kdbx",
+    "writer": "KeePassXC 2.8.0 (changed and saved kp40_aeskdf_aes_keyfile.kdbx)",
+    "version": "4.1",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": null,
+    "keyFile": "corpus_v2.keyx",
+    "note": "KeePassXC saves KDBX 4.0 as 4.1"
+  },
+  {
+    "file": "kxc_kp41_argon2id_aes_both.kdbx",
+    "writer": "KeePassXC 2.8.0 (changed and saved kp41_argon2id_aes_both.kdbx)",
+    "version": "4.1",
+    "kdf": "argon2id",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": "corpus_hex.key"
+  },
+  {
+    "file": "kxc_kp31_aeskdf_aes_pw.kdbx",
+    "writer": "KeePassXC 2.8.0 (changed and saved kp31_aeskdf_aes_pw.kdbx)",
+    "version": "4.1",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null,
+    "note": "KeePassXC saves KDBX 3.1 as 4.1"
+  },
+  {
+    "file": "kxc_kp31_aeskdf_chacha20_both.kdbx",
+    "writer": "KeePassXC 2.8.0 (changed and saved kp31_aeskdf_chacha20_both.kdbx)",
+    "version": "4.1",
+    "kdf": "aes-kdf",
+    "cipher": "chacha20",
+    "password": "corpus-demo",
+    "keyFile": "corpus_v1.key",
+    "note": "KeePassXC saves KDBX 3.1 as 4.1"
+  },
+  {
+    "file": "kxc_created_both.kdbx",
+    "writer": "KeePassXC 2.8.0 (db-create)",
+    "version": "4.1",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": "corpus_v2.keyx",
+    "note": "KeePassXC defaults"
+  }
+]

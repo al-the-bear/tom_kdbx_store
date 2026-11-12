@@ -24,7 +24,7 @@ dependencies:
   # `_bin/publishing/publish_staged.sh`, `git checkout --detach`, commit the
   # moved gitlink in `tom_ai`, then raise the constraint below. This is the
   # only package that names the fork (`test/supply_chain_test.dart`).
-  tom_kpasslib: ^1.1.2+tom.2
+  tom_kpasslib: ^1.1.2+tom.3
   # Reading a key file the way the package always has (Credentials.keyFileKey):
   # an XML key file, and the SHA-256 of any other file.
   crypto: ^3.0.6

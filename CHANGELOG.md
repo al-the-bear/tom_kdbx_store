@@ -19,8 +19,16 @@
   key file (hex for 2.x, base64 otherwise), else the SHA-256 of the file — so
   every file a key file protected still opens. `tom_kpasslib` alone refuses
   XML that is no key file and takes 32 raw bytes as the key itself.
-- `tom_kpasslib` ^1.1.2+tom.2, which reads a binary's protected flag the right
-  way round.
+- `tom_kpasslib` ^1.1.2+tom.3: it reads a binary's protected flag the right way
+  round (tom.2), and keeps a KDBX 3 file's protected values beside a protected
+  binary (tom.3).
+- Read-only on the types: `KdbxFile.deletedObjects`, `KdbxMeta.customIcons`,
+  `KdbxEntry.customIconUuid`.
+- A KDBX compatibility corpus (`test/corpus/`, README there): files written by
+  KeePassXC, `tom_kdbx`, this package's 0.1.0 and `tom_kpasslib` over KDBX
+  3.1 / 4.0 / 4.1, Argon2d / Argon2id / AES-KDF, AES / ChaCha20 and password /
+  key file / both. Each reads as KeePassXC reads it, before and after this
+  package writes it back (`test/corpus_test.dart`).
 - New on the types: `KdbxEntry.label`, `KdbxFile.recycleBin`,
   `KdbxFile.credentials` (re-keying), `KdbxMeta.databaseName`,
   `Credentials.getHash`.

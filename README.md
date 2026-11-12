@@ -139,7 +139,9 @@ guard that it names no group, the settings version refusal, the discard of an
 unopenable container, the bootstrap, the foreign client's moves, the KDBX
 types (when history is pushed, times, tags, binaries, protected values, a
 rejected key, a file written by the earlier KDBX library `tom_kdbx`, key
-files giving the composite keys `tom_kdbx` computed), and a
+files giving the composite keys `tom_kdbx` computed), the KDBX compatibility
+corpus (files written by KeePassXC, `tom_kdbx`, 0.1.0 and `tom_kpasslib`, each
+read as KeePassXC reads it, before and after a write-back; `test/corpus/`), and a
 check that `tom_kpasslib` is taken by version from pub.dev, with no other KDBX
 library beside it. The suites that read no file from disk also run in the
 browser: `dart test -p chrome` with `CHROME_EXECUTABLE` set, naming those test
