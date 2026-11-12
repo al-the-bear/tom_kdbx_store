@@ -1,8 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
 ### Changed
+
+- **Licensed BSD-3.** The package no longer contains or links GPL code: the
+  KDBX library is `tom_kpasslib` (MIT) instead of `tom_kdbx` (GPL-3), so the
+  package and every program built on it can be BSD-3. 0.1.0 stays GPL-3.0 on
+  pub.dev as it was published.
 
 - **The KDBX library is `tom_kpasslib`** (the workspace's fork of `kpasslib`,
   MIT) instead of `tom_kdbx` (AuthPass's `kdbx.dart`, GPL-3). The KDBX types the

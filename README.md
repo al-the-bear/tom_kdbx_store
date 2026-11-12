@@ -1,10 +1,10 @@
 # tom_kdbx_store
 
-Published on pub.dev as [`tom_kdbx_store` 0.1.0](https://pub.dev/packages/tom_kdbx_store).
+Published on pub.dev as [`tom_kdbx_store` 0.2.0](https://pub.dev/packages/tom_kdbx_store).
 
 KDBX storage for Tom applications: a **record store** over a KDBX file, an
 **encrypted settings container** with its groups, and the **KDBX binding** of
-`tom_core_storage`'s key port. Licensed GPL-3.0.
+`tom_core_storage`'s key port. Licensed BSD-3.
 
 ## Overview
 
@@ -129,8 +129,9 @@ Future<void> main() async {
 
 ## Licence
 
-GPL-3.0 (see [LICENSE](LICENSE)). A BSD-3 package never depends on this one;
-the Webwork seam audit checks the workspace's shared BSD packages for it.
+BSD-3 (see [LICENSE](LICENSE)). The KDBX library underneath, `tom_kpasslib`,
+is MIT. Version 0.1.0, built on the GPL-3 `tom_kdbx`, was published under
+GPL-3.0 and stays so.
 
 ## Tests
 

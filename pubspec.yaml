@@ -4,7 +4,7 @@ description: >-
   per record, entry history, recycle-bin delete, reserved entries), an
   encrypted settings container with its key, token, location and identity
   groups, and the KDBX binding of tom_core_storage's key port.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/al-the-bear/tom_kdbx_store
 
 environment:
