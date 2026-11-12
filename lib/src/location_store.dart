@@ -10,7 +10,7 @@
 /// home to defend.
 library;
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 
 import 'package:tom_core_storage/settings.dart';
 import 'settings_store.dart';

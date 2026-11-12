@@ -4,7 +4,7 @@ library;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 
 /// Converts a canonical `8-4-4-4-12` UUID string to a [KdbxUuid] (base64 of
 /// the same 16 bytes), so a record's id can *be* its entry's UUID.

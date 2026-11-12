@@ -2,12 +2,12 @@
 ///
 /// A record store never files an entry under a folder of its own or empties
 /// the recycle bin, but other clients do both, and a consumer's tests have to
-/// reproduce that to check how its store reads the result. These are kdbx
+/// reproduce that to check how its store reads the result. These are KDBX
 /// operations; this entry point is how a consumer reaches them without
-/// depending on `kdbx` itself. Not for shipped code.
+/// depending on the KDBX library itself. Not for shipped code.
 library;
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'src/kdbx_model.dart';
 
 /// Another KeePass client, acting on [file].
 final class TomKdbxForeignClient {

@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- **The KDBX library is `tom_kpasslib`** (the workspace's fork of `kpasslib`,
+  MIT) instead of `tom_kdbx` (AuthPass's `kdbx.dart`, GPL-3). The KDBX types the
+  API names are the package's own (`lib/src/kdbx_model.dart`), with the names
+  and behaviour consumers used: `KdbxFile`, `KdbxEntry`, `KdbxGroup`,
+  `KdbxFormat`, `Credentials`, `PlainValue`, `ProtectedValue`, `KdbxKey`,
+  `KdbxKeyCommon`, `KdbxUuid`, `KdbxCustomData`, `KdbxInvalidKeyException`,
+  and beside them `StringValue`, `KdbxBinary`, `KdbxBody`, `KdbxMeta`,
+  `KdbxTimes` and `KdbxNode`. Members of `tom_kdbx`'s types the package never
+  used are gone (merge, change streams, dirty tracking, icons, ...).
+- **It runs in the browser**: `tom_kpasslib` compiles with dart2js.
+- **Key files read as before.** `Credentials.composite` takes the key-file
+  part the way `tom_kdbx` did (`Credentials.keyFileKey`): 64 hex digits, an XML
+  key file (hex for 2.x, base64 otherwise), else the SHA-256 of the file — so
+  every file a key file protected still opens. `tom_kpasslib` alone refuses
+  XML that is no key file and takes 32 raw bytes as the key itself.
+- `tom_kpasslib` ^1.1.2+tom.2, which reads a binary's protected flag the right
+  way round.
+- New on the types: `KdbxEntry.label`, `KdbxFile.recycleBin`,
+  `KdbxFile.credentials` (re-keying), `KdbxMeta.databaseName`,
+  `Credentials.getHash`.
+- A new file has no recycle bin until something is deleted, as before; a file
+  whose recycle bin is switched off gets it switched on by a delete.
+
 ## 0.1.0
 
 ### Added

@@ -1,8 +1,7 @@
 /// The `keys` group: where per-file container keys are kept.
 ///
 /// A key is a secret, so it lives where secrets live — a `Password` field on a
-/// KDBX entry, which `package:tom_kdbx` holds as a [ProtectedValue], encrypted in
-/// memory and at rest. One entry per key, which is deliberately what a password
+/// KDBX entry, held as a [ProtectedValue]: encrypted in memory and at rest. One entry per key, which is deliberately what a password
 /// manager already shows.
 ///
 /// **Two lookup keys, on purpose.** The two default scopes are found by Title,
@@ -20,7 +19,7 @@ library;
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 
 import 'settings_store.dart';

@@ -3,7 +3,7 @@ library;
 
 import 'dart:typed_data';
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 import 'package:tom_core_storage/settings.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 

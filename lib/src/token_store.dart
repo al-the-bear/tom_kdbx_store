@@ -1,7 +1,7 @@
 /// The `tokens` group: remote credentials by host.
 library;
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 
 import 'settings_store.dart';
@@ -10,8 +10,8 @@ import 'settings_store.dart';
 /// `tokens`).
 ///
 /// A token is a secret, so it lives where secrets live: a KDBX entry with the
-/// value in the `Password` field, which `package:tom_kdbx` holds as a
-/// [ProtectedValue] — encrypted in memory and encrypted at rest.
+/// value in the `Password` field, held as a [ProtectedValue] — encrypted in
+/// memory and encrypted at rest.
 ///
 /// One entry per host, `Title` = the host. That is deliberately the shape a
 /// password manager shows, so a user who opens the settings container in one

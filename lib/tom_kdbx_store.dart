@@ -4,31 +4,13 @@
 /// identity), the KDBX binding of `tom_core_storage`'s key port, and the
 /// settings bootstrap's container half.
 ///
-/// GPL-3.0, because it imports `package:tom_kdbx`; a BSD package never imports
-/// this one.
+/// The KDBX types its API names — files, groups, entries, fields, credentials,
+/// the format — are its own (`src/kdbx_model.dart`), implemented over
+/// `tom_kpasslib`: a consumer names only this package, and the KDBX library
+/// underneath can change without the consumer noticing.
 library;
 
-// The kdbx types this package's API names. A consumer that holds an entry, a
-// file or credentials has to be able to name them, and doing so through this
-// list keeps every consumer on the one pinned fork rather than each depending
-// on `kdbx` directly. `KdbxCustomData` is what [TomKdbxRecordStore.meta]
-// returns; `PlainValue` and `ProtectedValue` are the two kinds of field value a
-// group distinguishes — a token or a key is protected, a locator is not.
-export 'package:tom_kdbx/tom_kdbx.dart'
-    show
-        Credentials,
-        KdbxCustomData,
-        KdbxEntry,
-        KdbxFile,
-        KdbxFormat,
-        KdbxGroup,
-        KdbxInvalidKeyException,
-        KdbxKey,
-        KdbxKeyCommon,
-        KdbxUuid,
-        PlainValue,
-        ProtectedValue;
-
+export 'src/kdbx_model.dart';
 export 'src/asset_entry.dart';
 export 'src/history_store.dart';
 export 'src/identity_store.dart';

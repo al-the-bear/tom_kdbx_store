@@ -2,7 +2,7 @@
 /// the metadata map as a fragment on the same entry.
 library;
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 import 'package:tom_basics/utilities.dart';
 import 'package:tom_core_storage/tom_core_storage.dart';
 import 'package:yaml/yaml.dart' as yaml;

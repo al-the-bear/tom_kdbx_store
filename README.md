@@ -4,7 +4,7 @@ Published on pub.dev as [`tom_kdbx_store` 0.1.0](https://pub.dev/packages/tom_kd
 
 KDBX storage for Tom applications: a **record store** over a KDBX file, an
 **encrypted settings container** with its groups, and the **KDBX binding** of
-`tom_core_storage`'s key port. Licensed GPL-3.0, because it imports `tom_kdbx`.
+`tom_core_storage`'s key port. Licensed GPL-3.0.
 
 ## Overview
 
@@ -55,10 +55,13 @@ Keys are stated as `tom_core_storage`'s `TomKeyMaterial`;
 `Credentials` (a passphrase, a key file, or both) and opens containers, with a
 default key and an override per file.
 
-This is the one package that declares `tom_kdbx`. A consumer reaches the
-format through the types this package re-exports and the operations it names,
-and never depends on `tom_kdbx` itself, so the fork's version is chosen in one
-place. For a
+The KDBX types the API names are the package's own (`KdbxFile`, `KdbxEntry`,
+`KdbxGroup`, `Credentials`, `KdbxFormat`, `PlainValue` / `ProtectedValue`,
+`KdbxKey`, `KdbxUuid`, ...), implemented over
+[`tom_kpasslib`](https://pub.dev/packages/tom_kpasslib). This is the one
+package that declares the KDBX library: a consumer names only these types, so
+the library underneath is chosen in one place and can change without the
+consumer noticing. For a
 consumer's tests, `package:tom_kdbx_store/testing.dart` has
 `TomKdbxForeignClient`: what another KeePass client does to a file and this
 package never does — filing an entry under a folder of its own, emptying the
@@ -74,10 +77,11 @@ dependencies:
     path: ../../tom_ai/kdbx_store
 ```
 
-It depends on [`tom_kdbx`](https://pub.dev/packages/tom_kdbx) by version — the
-workspace's fork of `kdbx` 2.4.2, published on pub.dev from
-`al-the-bear/tom_kdbx`, branch `tom/2.4.2-patches` — never by a path to the
-fork's working copy. Dart SDK `^3.10.0`; no Flutter dependency.
+It depends on [`tom_kpasslib`](https://pub.dev/packages/tom_kpasslib) by
+version — the workspace's fork of `kpasslib` 1.1.2 (MIT), published on pub.dev
+from `al-the-bear/tom_kpasslib`, branch `tom/1.1.2-patches` — never by a path to
+the fork's working copy. Dart SDK `^3.10.0`; no Flutter dependency. It runs on
+the VM and in the browser.
 
 ## Example
 
@@ -110,34 +114,36 @@ Future<void> main() async {
 
 ## Limits
 
-- **No browser.** `package:tom_kdbx` compiles under dart2js and then throws
-  `Uint64 accessor not supported by dart2js` on the first container it reads or
-  writes: the KDBX 4 header's variant dictionary is written with
-  `ByteData.setUint64` and read with `getUint64`, which dart2js does not
-  implement. A web build therefore cannot use this package; a browser
-  application holds key material with `tom_core_storage`'s
-  `TomMemoryKeyRegistry` and persists no encrypted settings.
-- **No container-level merge.** `KdbxFile.merge` is two-way and entry-scoped:
-  it cannot tell a deletion from an absence, settles disagreements silently,
-  and does not merge meta custom data. A consumer that syncs merges its own
-  model and writes the result; entries supply history, not merge semantics.
-- **The history a library pushes is its own.** `tom_kdbx` decides when a field
-  write pushes a history snapshot; a version that must be kept without becoming
-  current is added explicitly with `historySnapshot`.
+- **No container-level merge.** The package merges no two copies of a file.
+  A consumer that syncs merges its own model and writes the result; entries
+  supply history, not merge semantics.
+- **When history is pushed.** An entry's first change after the file was read
+  or saved pushes one snapshot of its previous state; a new entry pushes none,
+  and further changes before the next save push none. A version that must be
+  kept without becoming current is added explicitly with `historySnapshot`.
+- **Key files** are read the way the earlier KDBX library `tom_kdbx` read
+  them, so files it keyed still open: a file of exactly 32 raw bytes is hashed,
+  where KeePass takes it as the key itself.
+- **Argon2 in the browser** is pointycastle's, slower than on the VM: a file
+  with a high memory cost takes seconds to open there.
 
 ## Licence
 
-GPL-3.0 (see [LICENSE](LICENSE)), inherited from `tom_kdbx` (upstream `kdbx`). A BSD-3 package never
-depends on this one; the Webwork seam audit checks the workspace's shared BSD
-packages for it.
+GPL-3.0 (see [LICENSE](LICENSE)). A BSD-3 package never depends on this one;
+the Webwork seam audit checks the workspace's shared BSD packages for it.
 
 ## Tests
 
 `dart test` runs the record store, the asset entry, the history store, the settings groups and the store's own
 guard that it names no group, the settings version refusal, the discard of an
-unopenable container, the bootstrap, the foreign client's moves, and a check
-that `tom_kdbx` is taken by version from pub.dev, with no second KDBX
-implementation beside it.
+unopenable container, the bootstrap, the foreign client's moves, the KDBX
+types (when history is pushed, times, tags, binaries, protected values, a
+rejected key, a file written by the earlier KDBX library `tom_kdbx`, key
+files giving the composite keys `tom_kdbx` computed), and a
+check that `tom_kpasslib` is taken by version from pub.dev, with no other KDBX
+library beside it. The suites that read no file from disk also run in the
+browser: `dart test -p chrome` with `CHROME_EXECUTABLE` set, naming those test
+files.
 
 ## Disclaimer
 

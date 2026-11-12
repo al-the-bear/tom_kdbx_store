@@ -1,7 +1,7 @@
 /// A KDBX file's entry history behind the sync history port.
 library;
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 import 'package:tom_core_sync/tom_core_sync.dart';
 
 import 'record_store.dart';

@@ -2,7 +2,7 @@
 /// record's id.
 library;
 
-import 'package:tom_kdbx/tom_kdbx.dart';
+import 'kdbx_model.dart';
 
 import 'uuid_convert.dart';
 
