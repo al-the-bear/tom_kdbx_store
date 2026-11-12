@@ -157,5 +157,50 @@
     "password": "corpus-demo",
     "keyFile": "corpus_v2.keyx",
     "note": "KeePassXC defaults"
+  },
+  {
+    "file": "keepass2_41_argon2id_chacha20_pw.kdbx",
+    "writer": "KeePass 2.62 (KPScript)",
+    "version": "4.1",
+    "kdf": "argon2id",
+    "cipher": "chacha20",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "keepass2_41_argon2d_aes_keyfile.kdbx",
+    "writer": "KeePass 2.62 (KPScript)",
+    "version": "4.1",
+    "kdf": "argon2d",
+    "cipher": "aes",
+    "password": null,
+    "keyFile": "corpus_v2.keyx"
+  },
+  {
+    "file": "keepass2_40_aeskdf_aes_both.kdbx",
+    "writer": "KeePass 2.62 (KPScript)",
+    "version": "4.0",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": "corpus_v1.key"
+  },
+  {
+    "file": "keepass2_31_aeskdf_aes_pw.kdbx",
+    "writer": "KeePass 2.62 (KPScript)",
+    "version": "3.1",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": "corpus-demo",
+    "keyFile": null
+  },
+  {
+    "file": "keepass2_31_aeskdf_aes_hexkey.kdbx",
+    "writer": "KeePass 2.62 (KPScript)",
+    "version": "3.1",
+    "kdf": "aes-kdf",
+    "cipher": "aes",
+    "password": null,
+    "keyFile": "corpus_hex.key"
   }
 ]

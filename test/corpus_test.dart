@@ -1,6 +1,6 @@
 /// The KDBX compatibility corpus (test/corpus/README.md): files written by
-/// KeePassXC, tom_kdbx, this package's 0.1.0 (on tom_kdbx) and tom_kpasslib,
-/// over KDBX 3.1 / 4.0 / 4.1, Argon2d / Argon2id / AES-KDF, AES / ChaCha20,
+/// KeePass 2.x, KeePassXC, tom_kdbx, this package's 0.1.0 (on tom_kdbx) and
+/// tom_kpasslib, over KDBX 3.1 / 4.0 / 4.1, Argon2d / Argon2id / AES-KDF, AES / ChaCha20,
 /// password / key file / both.
 ///
 /// For every file: this package reads what KeePassXC reads in it (its XML
@@ -71,9 +71,10 @@ void main() {
 
   test('CORPUS-0: the corpus holds every writer, version, KDF, cipher and key '
       'kind the README names', () {
-    expect(manifest, hasLength(17));
+    expect(manifest, hasLength(22));
     String all(String key) => manifest.map((e) => e[key]).join(' ');
     for (final writer in [
+      'KeePass 2.',
       'KeePassXC',
       'tom_kdbx 2',
       'tom_kdbx_store 0.1.0',
