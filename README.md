@@ -124,6 +124,12 @@ Future<void> main() async {
 - **Key files** are read the way the earlier KDBX library `tom_kdbx` read
   them, so files it keyed still open: a file of exactly 32 raw bytes is hashed,
   where KeePass takes it as the key itself.
+- **The key derivation of a new file** is chosen at creation:
+  `KdbxFormat().create(credentials, name, argon2: KdbxArgon2(...))` takes the
+  Argon2 variant (`argon2d` or `argon2id`), memory, iterations and lanes;
+  without a choice a file gets `KdbxArgon2.defaults` (Argon2d, 1 MiB,
+  2 iterations, 1 lane). `KdbxFile.argon2` reads an open file's Argon2 (null
+  for AES-KDF and KDBX 3), and a save keeps it.
 - **Argon2 in the browser** is pointycastle's, slower than on the VM: a file
   with a high memory cost takes seconds to open there.
 

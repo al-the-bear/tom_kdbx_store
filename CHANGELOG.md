@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.3
+
+### Added
+
+- `KdbxArgon2` and `KdbxArgon2Type`: a KDBX 4 file's Argon2 key derivation
+  (variant, memory, iterations, lanes).
+- `KdbxFormat.create(..., argon2:)`: the key derivation of a new file, Argon2d
+  or Argon2id with its parameters; `KdbxArgon2.defaults` (Argon2d, 1 MiB,
+  2 iterations, 1 lane) without a choice, as before.
+- `KdbxFile.argon2`: an open file's Argon2, or null for AES-KDF and KDBX 3.
+
 ## 0.2.2
 
 ### Added

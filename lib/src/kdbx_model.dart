@@ -237,18 +237,100 @@ final class KdbxInvalidKeyException implements Exception {
 
 // ── Format and file ─────────────────────────────────────────────────────────
 
-/// Creates and reads KDBX files: KDBX 4.1 with Argon2d and AES-256 for a new
-/// file; every KDBX 3 and 4 file KeePass and KeePassXC write for a read.
+/// The Argon2 variant of a KDBX 4 file's key derivation.
+enum KdbxArgon2Type {
+  /// Argon2d: data-dependent memory access.
+  argon2d,
+
+  /// Argon2id: Argon2i's first pass, then Argon2d (RFC 9106's recommendation).
+  argon2id,
+}
+
+/// The Argon2 key derivation of a KDBX 4 file: the variant, the memory in
+/// bytes, the iterations and the lanes. Files are written with Argon2 version
+/// 1.3.
+final class KdbxArgon2 {
+  /// Argon2 of [type] over [memory] bytes (a multiple of 1024, at least 8 KiB
+  /// per lane), [iterations] (at least 1) and [parallelism] lanes (1 to
+  /// 2^24 - 1).
+  const KdbxArgon2({
+    required this.type,
+    required this.memory,
+    required this.iterations,
+    this.parallelism = 1,
+  });
+
+  /// What a new file gets without a choice: Argon2d, 1 MiB, 2 iterations,
+  /// 1 lane.
+  static const defaults = KdbxArgon2(
+    type: KdbxArgon2Type.argon2d,
+    memory: 1 << 20,
+    iterations: 2,
+  );
+
+  /// The variant.
+  final KdbxArgon2Type type;
+
+  /// The memory in bytes.
+  final int memory;
+
+  /// The number of passes over the memory.
+  final int iterations;
+
+  /// The number of lanes.
+  final int parallelism;
+
+  @override
+  bool operator ==(Object other) =>
+      other is KdbxArgon2 &&
+      other.type == type &&
+      other.memory == memory &&
+      other.iterations == iterations &&
+      other.parallelism == parallelism;
+
+  @override
+  int get hashCode => Object.hash(type, memory, iterations, parallelism);
+
+  @override
+  String toString() =>
+      'KdbxArgon2(${type.name}, ${memory ~/ 1024} KiB, '
+      '$iterations iterations, $parallelism lanes)';
+}
+
+/// Creates and reads KDBX files: KDBX 4.1 with AES-256 and the chosen Argon2
+/// ([KdbxArgon2.defaults] without a choice) for a new file; every KDBX 3 and
+/// 4 file KeePass and KeePassXC write for a read.
 class KdbxFormat {
   /// The format.
   KdbxFormat();
 
-  /// A new, empty file named [name], opened with [credentials].
-  KdbxFile create(Credentials credentials, String name) {
+  /// A new, empty file named [name], opened with [credentials], its key
+  /// derived through [argon2].
+  ///
+  /// Throws [ArgumentError] for an [argon2] outside the ranges
+  /// [KdbxArgon2.new] names.
+  KdbxFile create(
+    Credentials credentials,
+    String name, {
+    KdbxArgon2 argon2 = KdbxArgon2.defaults,
+  }) {
     final db = kp.KdbxDatabase.create(
       credentials: credentials._native,
       name: name,
     );
+    try {
+      db.header.setArgon2(
+        type: switch (argon2.type) {
+          KdbxArgon2Type.argon2d => kp.Argon2Type.argon2d,
+          KdbxArgon2Type.argon2id => kp.Argon2Type.argon2id,
+        },
+        memory: argon2.memory,
+        iterations: argon2.iterations,
+        parallelism: argon2.parallelism,
+      );
+    } on kp.UnsupportedValueError catch (e) {
+      throw ArgumentError.value(argon2, 'argon2', '$e');
+    }
     // A new file has no recycle bin until something is deleted.
     final bin = db.meta.recycleBinUuid;
     db.root.groups.removeWhere((group) => group.uuid == bin);
@@ -295,6 +377,22 @@ class KdbxFile {
   set credentials(Credentials credentials) {
     _credentials = credentials;
     _db.header.credentials = credentials._native;
+  }
+
+  /// The file's Argon2 key derivation, or null when it has none (KDBX 3, or
+  /// AES-KDF).
+  KdbxArgon2? get argon2 {
+    final settings = _db.header.argon2Settings;
+    if (settings == null) return null;
+    return KdbxArgon2(
+      type: switch (settings.type) {
+        kp.Argon2Type.argon2d => KdbxArgon2Type.argon2d,
+        kp.Argon2Type.argon2id => KdbxArgon2Type.argon2id,
+      },
+      memory: settings.memory,
+      iterations: settings.iterations,
+      parallelism: settings.parallelism,
+    );
   }
 
   /// The recycle bin, or null while the file has none.
