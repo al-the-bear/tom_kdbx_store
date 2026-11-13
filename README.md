@@ -1,6 +1,6 @@
 # tom_kdbx_store
 
-Published on pub.dev as [`tom_kdbx_store` 0.2.0](https://pub.dev/packages/tom_kdbx_store).
+Published on pub.dev as [`tom_kdbx_store` 0.2.1](https://pub.dev/packages/tom_kdbx_store).
 
 KDBX storage for Tom applications: a **record store** over a KDBX file, an
 **encrypted settings container** with its groups, and the **KDBX binding** of

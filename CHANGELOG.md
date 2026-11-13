@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+### Added
+
+- `KdbxTimes.expires`: KDBX's `Expires` flag beside `expiryTime` (an entry
+  expires only when the flag is set).
+
 ## 0.2.0
 
 ### Changed

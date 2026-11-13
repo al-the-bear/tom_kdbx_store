@@ -89,6 +89,23 @@ void main() {
     expect(back.times.lastModificationTime.get()!.isAfter(before), isTrue);
   });
 
+  test('KDBX-MODEL-3b: the Expires flag and the expiry time survive a save; '
+      'a new entry does not expire', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    final entry = newEntry(file)..setString(field, PlainValue('x'));
+    expect(entry.times.expires.get(), isFalse);
+    final at = DateTime.utc(2027, 1, 1);
+    entry
+      ..times.expires.set(true)
+      ..times.expiryTime.set(at);
+    final back = (await reopen(file)).body.rootGroup.entries.single;
+    expect(back.times.expires.get(), isTrue);
+    expect(back.times.expiryTime.get(), at);
+    back.times.expires.set(false);
+    final again = (await reopen(back.file)).body.rootGroup.entries.single;
+    expect(again.times.expires.get(), isFalse);
+  });
+
   test('KDBX-MODEL-4: tags are one string separated by ";", and survive a '
       'save', () async {
     final file = KdbxFormat().create(credentials, 'm');

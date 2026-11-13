@@ -783,6 +783,14 @@ final class KdbxTimes {
     (times, value) => times.access = value,
   );
 
+  /// Whether the entry expires at [expiryTime] (KDBX's `Expires` flag; the
+  /// time alone does not make an entry expire). Like the times, setting it
+  /// is not a change of the entry: wrap it in [KdbxEntry.modify] for one.
+  late final KdbxNode<bool> expires = KdbxNode._(
+    () => _native.times.expires,
+    (value) => _native.times.expires = value ?? false,
+  );
+
   /// When the entry expires.
   late final KdbxNode<DateTime> expiryTime = _node(
     (times) => times.expiry,
