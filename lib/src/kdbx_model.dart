@@ -348,6 +348,42 @@ class KdbxFile {
     _db.move(item: entry._native, target: null);
   }
 
+  /// Moves [group] (with everything in it) into [toGroup].
+  ///
+  /// Throws a [StateError] when [toGroup] is [group] or lies inside it, and
+  /// for the root group.
+  void moveGroup(KdbxGroup group, KdbxGroup toGroup) {
+    if (group._native.parent == null) {
+      throw StateError('the root group cannot move');
+    }
+    if (identical(group._native, toGroup._native) ||
+        group._native.allGroups.contains(toGroup._native)) {
+      throw StateError('a group cannot move into itself');
+    }
+    _db.move(item: group._native, target: toGroup._native);
+  }
+
+  /// Removes [group] and everything in it from the file and records their
+  /// UUIDs as deleted.
+  ///
+  /// Throws [StateError] for the root group.
+  void deleteGroupPermanently(KdbxGroup group) {
+    if (group._native.parent == null) {
+      throw StateError('the root group cannot be deleted');
+    }
+    _db.move(item: group._native, target: null);
+  }
+
+  /// Records [uuid] as permanently deleted at [at] — a deletion another copy
+  /// of the file made, carried over by a merge. Keeps an earlier record.
+  void recordDeletion(KdbxUuid uuid, DateTime at) {
+    _db.deletedObjects.putIfAbsent(uuid._native, () => kp.KdbxTime(at.toUtc()));
+  }
+
+  /// When the file records [uuid] as permanently deleted, or null.
+  DateTime? deletedAt(KdbxUuid uuid) =>
+      _db.deletedObjects[uuid._native]?.time?.toUtc();
+
   /// Whether the file records [uuid] as permanently deleted.
   bool isDeleted(KdbxUuid uuid) => _db.deletedObjects.containsKey(uuid._native);
 
@@ -397,6 +433,13 @@ final class KdbxMeta {
     for (final icon in _file._db.meta.customIcons.entries)
       KdbxUuid(icon.key.string): Uint8List.fromList(icon.value.data),
   };
+
+  /// How many history versions an entry keeps (KeePass's limit; null or
+  /// negative: no limit).
+  late final KdbxNode<int> historyMaxItems = KdbxNode._(
+    () => _file._db.meta.historyMaxItems,
+    (value) => _file._db.meta.historyMaxItems = value,
+  );
 
   /// The file's custom data: string values by key, belonging to the file.
   late final KdbxCustomData customData = KdbxCustomData._(
@@ -450,6 +493,15 @@ class KdbxGroup {
 
   /// The group's UUID.
   KdbxUuid get uuid => KdbxUuid(_native.uuid.string);
+
+  /// Gives the group [uuid] — for a group that is the same group as one in
+  /// another copy of the file (a merge).
+  void assignUuid(KdbxUuid uuid) => _native.uuid = uuid._native;
+
+  /// The group's custom data.
+  late final KdbxCustomData customData = KdbxCustomData._(
+    () => _native.customData ??= kp.KdbxCustomData(),
+  );
 
   /// The group's name.
   late final KdbxNode<String> name = KdbxNode._(
@@ -581,6 +633,12 @@ class KdbxEntry {
           .toList();
       _native.tags = tags.isEmpty ? null : tags;
     }),
+  );
+
+  /// The entry's custom data (KDBX 4): string values by key, belonging to the
+  /// entry. Like the times, setting one is not a change of the entry.
+  late final KdbxCustomData customData = KdbxCustomData._(
+    () => _native.customData ??= kp.KdbxCustomData(),
   );
 
   /// The value of the string field [key], or null.

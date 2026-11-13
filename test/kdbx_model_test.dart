@@ -106,6 +106,74 @@ void main() {
     expect(again.times.expires.get(), isFalse);
   });
 
+  test('KDBX-MODEL-3c: entry and group custom data survive a save; setting '
+      'it is no change of the entry', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    final entry = newEntry(file)..setString(field, PlainValue('x'));
+    final group = file.createGroup(parent: file.body.rootGroup, name: 'g');
+    entry.customData['app.note'] = 'kept';
+    group.customData['app.group'] = 'also';
+    final back = await reopen(file);
+    final again = back.body.rootGroup.entries.single;
+    expect(again.customData['app.note'], 'kept');
+    expect(back.body.rootGroup.groups.single.customData['app.group'], 'also');
+    again.customData['app.note'] = 'changed';
+    expect(again.history, isEmpty);
+    expect(again.customData.remove('app.note'), 'changed');
+    expect(again.customData.isEmpty, isTrue);
+  });
+
+  test('KDBX-MODEL-3d: a group takes an assigned UUID, moves with what it '
+      'holds, refuses to move into itself, and is deleted with a record of '
+      'every UUID in it', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    final root = file.body.rootGroup;
+    final a = file.createGroup(parent: root, name: 'a');
+    final b = file.createGroup(parent: root, name: 'b');
+    final inner = file.createGroup(parent: a, name: 'inner');
+    final id = KdbxUuid.random();
+    inner.assignUuid(id);
+    final entry = KdbxEntry.create(file, inner);
+    inner.addEntry(entry);
+    entry.setString(field, PlainValue('x'));
+    file.moveGroup(a, b);
+    expect(a.parent!.uuid, b.uuid);
+    expect(() => file.moveGroup(b, inner), throwsStateError);
+    expect(() => file.moveGroup(root, b), throwsStateError);
+    final back = await reopen(file);
+    final moved = back.body.rootGroup.groups.single.groups.single;
+    expect(moved.name.get(), 'a');
+    expect(moved.groups.single.uuid, id);
+    back.deleteGroupPermanently(moved);
+    expect(back.isDeleted(id), isTrue);
+    expect(back.isDeleted(moved.groups.single.entries.single.uuid), isTrue);
+    expect(
+      () => back.deleteGroupPermanently(back.body.rootGroup),
+      throwsStateError,
+    );
+  });
+
+  test('KDBX-MODEL-3e: a recorded deletion keeps its time across a save and '
+      'an earlier record is kept', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    final id = KdbxUuid.random();
+    final at = DateTime.utc(2026, 5, 6, 7, 8, 9);
+    file.recordDeletion(id, at);
+    file.recordDeletion(id, DateTime.utc(2027));
+    final back = await reopen(file);
+    expect(back.isDeleted(id), isTrue);
+    expect(back.deletedAt(id), at);
+    expect(back.deletedAt(KdbxUuid.random()), isNull);
+  });
+
+  test('KDBX-MODEL-3f: the history limit survives a save', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    expect(file.body.meta.historyMaxItems.get(), 10);
+    file.body.meta.historyMaxItems.set(25);
+    final back = await reopen(file);
+    expect(back.body.meta.historyMaxItems.get(), 25);
+  });
+
   test('KDBX-MODEL-4: tags are one string separated by ";", and survive a '
       'save', () async {
     final file = KdbxFormat().create(credentials, 'm');

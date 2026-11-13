@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.2
+
+### Added
+
+- `KdbxEntry.customData` and `KdbxGroup.customData`: KDBX 4 custom data of an
+  entry or a group.
+- `KdbxGroup.assignUuid`, `KdbxFile.moveGroup` and
+  `KdbxFile.deleteGroupPermanently`: a group as a merge handles it.
+- `KdbxFile.recordDeletion` and `KdbxFile.deletedAt`: carrying a deletion
+  another copy of the file made, with its time.
+- `KdbxMeta.historyMaxItems`: how many history versions an entry keeps.
+
 ## 0.2.1
 
 ### Added
