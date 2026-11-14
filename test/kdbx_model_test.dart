@@ -233,6 +233,32 @@ void main() {
     );
   });
 
+  test('KDBX-MODEL-6b: bytes that are no KDBX file, or a file cut short, '
+      'are refused with KdbxFormatException (a FormatException), never a '
+      'type of the library underneath', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    newEntry(file).setString(field, PlainValue('x' * 2000));
+    final bytes = await file.save();
+    final cases = <String, Uint8List>{
+      'not a KDBX file': Uint8List.fromList(utf8.encode('not a vault')),
+      'empty': Uint8List(0),
+      'the signature only': bytes.sublist(0, 8),
+      'cut in the header': bytes.sublist(0, 100),
+      'cut in the body': bytes.sublist(0, bytes.length - 100),
+    };
+    for (final MapEntry(key: what, value: input) in cases.entries) {
+      Object? thrown;
+      try {
+        await KdbxFormat().read(input, credentials);
+      } on Object catch (e) {
+        thrown = e;
+      }
+      expect(thrown, isA<KdbxFormatException>(), reason: '$what: $thrown');
+      expect(thrown, isA<FormatException>(), reason: what);
+      expect((thrown! as KdbxFormatException).message, isNotEmpty);
+    }
+  });
+
   test('KDBX-MODEL-7: a new file has no recycle bin until something is '
       'deleted, and meta custom data can be removed', () async {
     final file = KdbxFormat().create(credentials, 'm');

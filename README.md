@@ -130,6 +130,12 @@ Future<void> main() async {
   without a choice a file gets `KdbxArgon2.defaults` (Argon2d, 1 MiB,
   2 iterations, 1 lane). `KdbxFile.argon2` reads an open file's Argon2 (null
   for AES-KDF and KDBX 3), and a save keeps it.
+- **What reading refuses** is told by the package's own exceptions:
+  `KdbxFormat().read` throws `KdbxInvalidKeyException` when the credentials do
+  not open the file, and `KdbxFormatException` (a `FormatException`) for bytes
+  that are no KDBX file it reads: no signature, damaged, cut short, or an
+  unsupported version or algorithm. No type of the library underneath
+  reaches a caller.
 - **Argon2 in the browser** is pointycastle's, slower than on the VM: a file
   with a high memory cost takes seconds to open there.
 

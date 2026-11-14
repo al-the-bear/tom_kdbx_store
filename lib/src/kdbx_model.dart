@@ -235,6 +235,28 @@ final class KdbxInvalidKeyException implements Exception {
   String toString() => 'KdbxInvalidKeyException: $message';
 }
 
+/// Bytes that are not a KDBX file this library reads: no KDBX signature, a
+/// damaged or truncated file, or a version, cipher or key derivation it does
+/// not support. A [FormatException], so a caller that knows no KDBX type
+/// catches it too.
+final class KdbxFormatException implements FormatException {
+  /// What is wrong with the file, as the library reported it.
+  @override
+  final String message;
+
+  /// A refusal reporting [message].
+  KdbxFormatException(this.message);
+
+  @override
+  Object? get source => null;
+
+  @override
+  int? get offset => null;
+
+  @override
+  String toString() => 'KdbxFormatException: $message';
+}
+
 // ── Format and file ─────────────────────────────────────────────────────────
 
 /// The Argon2 variant of a KDBX 4 file's key derivation.
@@ -340,7 +362,9 @@ class KdbxFormat {
 
   /// The file [input] holds, opened with [credentials].
   ///
-  /// Throws [KdbxInvalidKeyException] when the credentials do not open it.
+  /// Throws [KdbxInvalidKeyException] when the credentials do not open it,
+  /// and [KdbxFormatException] for bytes that are no KDBX file it reads (no
+  /// signature, damaged, truncated, an unsupported version or algorithm).
   Future<KdbxFile> read(Uint8List input, Credentials credentials) async {
     try {
       final db = await kp.KdbxDatabase.fromBytes(
@@ -349,7 +373,14 @@ class KdbxFormat {
       );
       return KdbxFile._(db, credentials);
     } on kp.InvalidCredentialsError catch (e) {
-      throw KdbxInvalidKeyException('$e');
+      throw KdbxInvalidKeyException(e.message);
+    } on kp.FileCorruptedError catch (e) {
+      throw KdbxFormatException(e.message);
+    } on kp.UnsupportedValueError catch (e) {
+      throw KdbxFormatException(e.message);
+    } on RangeError catch (e) {
+      // A file cut short is read past its end.
+      throw KdbxFormatException('File corrupted: truncated (${e.message})');
     }
   }
 }

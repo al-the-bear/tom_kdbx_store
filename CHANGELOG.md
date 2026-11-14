@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.4
+
+### Added
+
+- `KdbxFormatException` (a `FormatException`): `KdbxFormat.read` throws it for
+  bytes that are no KDBX file it reads (no signature, damaged, cut short, an
+  unsupported version or algorithm), where the library's own errors used to
+  pass through.
+
+### Changed
+
+- `KdbxInvalidKeyException.message` is the library's message, no longer the
+  error object's name.
+
 ## 0.2.3
 
 ### Added
