@@ -166,6 +166,7 @@ final class ProtectedValue implements StringValue {
 final class Credentials {
   final ProtectedValue? _password;
   final Uint8List? _keyFile;
+  final Uint8List? _compositeKey;
 
   /// Credentials of a [password] alone.
   Credentials(ProtectedValue password) : this.composite(password, null);
@@ -175,12 +176,33 @@ final class Credentials {
   /// SHA-256), either of them optional.
   Credentials.composite(ProtectedValue? password, Uint8List? keyFile)
     : _password = password,
-      _keyFile = keyFile;
+      _keyFile = keyFile,
+      _compositeKey = null;
 
-  kp.KdbxCredentials get _native => kp.KdbxCredentials(
-    password: _password?._data,
-    keyData: _keyFile == null ? null : keyFileKey(_keyFile),
-  );
+  /// Credentials of a composite key itself (32 bytes, what [getHash]
+  /// answers): they open and save the same files as the password and key
+  /// file it was made of, without either. A copy of [compositeKey] is kept.
+  Credentials.fromCompositeKey(Uint8List compositeKey)
+    : _password = null,
+      _keyFile = null,
+      _compositeKey = Uint8List.fromList(compositeKey) {
+    if (compositeKey.length != 32) {
+      throw ArgumentError.value(
+        compositeKey.length,
+        'compositeKey',
+        'a composite key has 32 bytes',
+      );
+    }
+  }
+
+  kp.KdbxCredentials get _native {
+    final composite = _compositeKey;
+    if (composite != null) return _CompositeKdbxCredentials(composite);
+    return kp.KdbxCredentials(
+      password: _password?._data,
+      keyData: _keyFile == null ? null : keyFileKey(_keyFile),
+    );
+  }
 
   /// The 32 bytes a key file contributes to the composite key, read the way
   /// files this package wrote have always been keyed: a string beginning with
@@ -219,8 +241,21 @@ final class Credentials {
   }
 
   /// The composite key these credentials make, as a hash: equal for two
-  /// credentials that open the same files.
+  /// credentials that open the same files. [Credentials.fromCompositeKey]
+  /// takes it back.
   Uint8List getHash() => Uint8List.fromList(_native.getHash());
+}
+
+/// The library's credentials of a composite key given as such: the hash the
+/// key derivation starts from, with no password or key file behind it and
+/// no challenge-response.
+final class _CompositeKdbxCredentials extends kp.KdbxCredentials {
+  _CompositeKdbxCredentials(this._composite);
+
+  final Uint8List _composite;
+
+  @override
+  List<int> getHash({List<int>? challenge}) => Uint8List.fromList(_composite);
 }
 
 /// A file's bytes do not open with the credentials given.

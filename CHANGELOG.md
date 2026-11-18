@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.5
+
+### Added
+
+- `Credentials.fromCompositeKey`: credentials of the composite key itself
+  (the 32 bytes `getHash` answers), which open and save the same files as
+  the password and key file it was made of, without either. An OS unlock
+  keeps the composite key instead of the password.
+
 ## 0.2.4
 
 ### Added

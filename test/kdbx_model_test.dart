@@ -317,4 +317,39 @@ void main() {
     final rekeyed = await KdbxFormat().read(bytes, other);
     expect(rekeyed.recycleBin!.entries.single.label, 'Introduction');
   });
+
+  test('KDBX-MODEL-10: the composite key opens and saves a file made with a '
+      'password and a key file, without either; a wrong composite key is '
+      'refused; a composite key is 32 bytes', () async {
+    final keyFile = Uint8List.fromList(utf8.encode('demo key file'));
+    final full = Credentials.composite(
+      ProtectedValue.fromString('demo password'),
+      keyFile,
+    );
+    final file = KdbxFormat().create(full, 'composite');
+    newEntry(file).setString(field, PlainValue('opened'));
+    final composite = Credentials.fromCompositeKey(full.getHash());
+    expect(composite.getHash(), full.getHash());
+    final opened = await reopen(file, composite);
+    expect(
+      opened.body.rootGroup.entries.single.getString(field)!.getText(),
+      'opened',
+    );
+    // Saved under the composite key (a new KDF seed), it still opens with
+    // the password and the key file.
+    opened.body.rootGroup.entries.single.setString(field, PlainValue('saved'));
+    final again = await KdbxFormat().read(await opened.save(), full);
+    expect(
+      again.body.rootGroup.entries.single.getString(field)!.getText(),
+      'saved',
+    );
+    await expectLater(
+      reopen(file, Credentials.fromCompositeKey(Uint8List(32))),
+      throwsA(isA<KdbxInvalidKeyException>()),
+    );
+    expect(
+      () => Credentials.fromCompositeKey(Uint8List(31)),
+      throwsArgumentError,
+    );
+  });
 }
