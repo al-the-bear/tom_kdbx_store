@@ -352,4 +352,37 @@ void main() {
       throwsArgumentError,
     );
   });
+
+  test("KDBX-MODEL-AUTOTYPE: an entry's auto-type settings and a group's "
+      'default sequence survive a save; setting them is a change', () async {
+    final file = KdbxFormat().create(credentials, 'm');
+    final entry = newEntry(file);
+    expect(entry.autoType, const KdbxAutoTypeSettings());
+    final group = file.body.rootGroup;
+    group.defaultAutoTypeSequence.set('{PASSWORD}{ENTER}');
+    group.autoTypeEnabled.set(true);
+    const settings = KdbxAutoTypeSettings(
+      defaultSequence: '{USERNAME}{TAB}{PASSWORD}{ENTER}',
+      associations: [
+        KdbxAutoTypeAssociation('Demo Login - *', ''),
+        KdbxAutoTypeAssociation('//^Remote.*//', '{PASSWORD}{ENTER}'),
+      ],
+    );
+    entry.autoType = settings;
+    final reread = await reopen(file);
+    final again = reread.body.rootGroup.entries.single;
+    expect(again.autoType, settings);
+    expect(
+      reread.body.rootGroup.defaultAutoTypeSequence.get(),
+      '{PASSWORD}{ENTER}',
+    );
+    expect(reread.body.rootGroup.autoTypeEnabled.get(), isTrue);
+
+    again.autoType = const KdbxAutoTypeSettings(enabled: false);
+    expect(again.history, hasLength(1));
+    expect(again.history.single.autoType, settings);
+    final third = (await reopen(reread)).body.rootGroup.entries.single;
+    expect(third.autoType.enabled, isFalse);
+    expect(third.autoType.associations, isEmpty);
+  });
 }

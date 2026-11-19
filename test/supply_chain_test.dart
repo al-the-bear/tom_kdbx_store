@@ -11,8 +11,9 @@ import 'package:yaml/yaml.dart';
 
 /// The oldest release of the fork this package works with: 1.1.2+tom.2 reads
 /// a binary's protected flag the right way round, 1.1.2+tom.3 keeps a KDBX 3
-/// file's protected values beside a protected binary.
-final minimumRelease = Version.parse('1.1.2+tom.3');
+/// file's protected values beside a protected binary, 1.1.2+tom.4 exports
+/// the auto-type types (`KdbxEntry.autoType`).
+final minimumRelease = Version.parse('1.1.2+tom.4');
 
 /// KDBX libraries that must not be in the graph: `tom_kdbx` and `kdbx` are
 /// GPL-3 (AuthPass's kdbx.dart), `kpasslib` would be a second copy of the

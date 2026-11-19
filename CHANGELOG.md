@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.6
+
+### Added
+
+- Auto-type (the KDBX `AutoType` element): `KdbxEntry.autoType`
+  (`KdbxAutoTypeSettings`: enabled, the entry's default sequence, the window
+  associations `KdbxAutoTypeAssociation`), set as one change of the entry;
+  `KdbxGroup.defaultAutoTypeSequence` and `KdbxGroup.autoTypeEnabled`. Needs
+  `tom_kpasslib` 1.1.2+tom.4.
+
+### Changed
+
+- A new entry has auto-type on unless its group (or a group above it) turns
+  it off, as KeePass does; it used to be off unless a group turned it on.
+
 ## 0.2.5
 
 ### Added

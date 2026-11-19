@@ -673,6 +673,19 @@ class KdbxGroup {
     (value) => _native.name = value ?? '',
   );
 
+  /// The group's default auto-type sequence, or null (its parent's).
+  late final KdbxNode<String> defaultAutoTypeSequence = KdbxNode._(() {
+    final sequence = _native.defaultAutoTypeSeq;
+    return sequence == null || sequence.isEmpty ? null : sequence;
+  }, (value) => _native.defaultAutoTypeSeq = value);
+
+  /// Whether auto-type is on for the group's entries: true, false, or null
+  /// (as its parent).
+  late final KdbxNode<bool> autoTypeEnabled = KdbxNode._(
+    () => _native.isAutoTypeEnabled,
+    (value) => _native.isAutoTypeEnabled = value,
+  );
+
   /// The group holding this one, or null for the root group.
   KdbxGroup? get parent {
     final parent = _native.parent;
@@ -704,6 +717,65 @@ class KdbxGroup {
 }
 
 // ── Entries ─────────────────────────────────────────────────────────────────
+
+/// One window association of an entry's auto-type: a window title pattern
+/// ([window], KeePass's syntax) and the sequence typed there (empty: the
+/// entry's default sequence).
+final class KdbxAutoTypeAssociation {
+  /// [sequence] for windows matching [window].
+  const KdbxAutoTypeAssociation(this.window, this.sequence);
+
+  /// The window title pattern.
+  final String window;
+
+  /// The keystroke sequence, or empty for the entry's default.
+  final String sequence;
+
+  @override
+  bool operator ==(Object other) =>
+      other is KdbxAutoTypeAssociation &&
+      other.window == window &&
+      other.sequence == sequence;
+
+  @override
+  int get hashCode => Object.hash(window, sequence);
+}
+
+/// An entry's auto-type settings (the KDBX `AutoType` element).
+final class KdbxAutoTypeSettings {
+  /// [enabled], with [defaultSequence] (null: inherited) and
+  /// [associations].
+  const KdbxAutoTypeSettings({
+    this.enabled = true,
+    this.defaultSequence,
+    this.associations = const [],
+  });
+
+  /// Whether auto-type is on for the entry.
+  final bool enabled;
+
+  /// The entry's own default sequence, or null (the group's, else the
+  /// application's).
+  final String? defaultSequence;
+
+  /// The window associations.
+  final List<KdbxAutoTypeAssociation> associations;
+
+  @override
+  bool operator ==(Object other) =>
+      other is KdbxAutoTypeSettings &&
+      other.enabled == enabled &&
+      other.defaultSequence == defaultSequence &&
+      other.associations.length == associations.length &&
+      [
+        for (var i = 0; i < associations.length; i++)
+          other.associations[i] == associations[i],
+      ].every((same) => same);
+
+  @override
+  int get hashCode =>
+      Object.hash(enabled, defaultSequence, Object.hashAll(associations));
+}
 
 /// A binary attached to an entry.
 final class KdbxBinary {
@@ -745,10 +817,23 @@ class KdbxEntry {
         prohibited: db.root.allItems.map((item) => item.uuid).toSet(),
       ),
     )..fields.clear();
+    // KeePass's default: auto-type is on unless a group turns it off (the
+    // library underneath turns it off unless the group turns it on).
+    native.autoType.enabled = _autoTypeOf(parent._native);
     final entry = KdbxEntry._(file, native, isHistoryEntry);
     file._entries[native] = entry;
     file._dirty.add(native);
     return entry;
+  }
+
+  /// Whether auto-type is on for a new entry of [group]: the nearest
+  /// group's own setting, else on.
+  static bool _autoTypeOf(kp.KdbxGroup? group) {
+    for (var g = group; g != null; g = g.parent) {
+      final enabled = g.isAutoTypeEnabled;
+      if (enabled != null) return enabled;
+    }
+    return true;
   }
 
   /// The entry's UUID.
@@ -782,6 +867,33 @@ class KdbxEntry {
 
   /// The entry's times.
   late final KdbxTimes times = KdbxTimes._(_native);
+
+  /// The entry's auto-type settings (the KDBX `AutoType` element): whether
+  /// auto-type is on for it, its own default sequence (null: the group's,
+  /// else the application's) and its window associations.
+  KdbxAutoTypeSettings get autoType {
+    final native = _native.autoType;
+    final sequence = native.defaultSequence;
+    return KdbxAutoTypeSettings(
+      enabled: native.enabled ?? true,
+      defaultSequence: sequence == null || sequence.isEmpty ? null : sequence,
+      associations: [
+        for (final item in native.items)
+          KdbxAutoTypeAssociation(item.window, item.keystrokeSequence),
+      ],
+    );
+  }
+
+  /// Sets the entry's auto-type settings, as one change ([modify]).
+  set autoType(KdbxAutoTypeSettings settings) => modify(() {
+    final native = _native.autoType;
+    native.enabled = settings.enabled;
+    native.defaultSequence = settings.defaultSequence;
+    native.items = [
+      for (final a in settings.associations)
+        kp.KdbxAutoTypeItem(window: a.window, keystrokeSequence: a.sequence),
+    ];
+  });
 
   /// The entry's tags, as one string separated by `;`.
   late final KdbxNode<String> tags = KdbxNode._(
